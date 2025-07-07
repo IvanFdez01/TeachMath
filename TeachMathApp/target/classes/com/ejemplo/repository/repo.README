@@ -1,0 +1,20 @@
+
+Aqui los convenios de nombres de los metodos de los repos
+y su traduccion en JPQL por Spring
+
+************************************************************
+
+findByUsername(String u)	
+WHERE username = ?
+
+findByUsernameAndRol(String u, Rol r)	
+WHERE username = ? AND rol = ?
+
+findByTeacher_Username(String t)	
+WHERE teacher.username = ?
+
+findByAgeGreaterThan(int age)	
+WHERE age > ?
+
+findByTitleContaining(String keyword)
+WHERE title LIKE %?%

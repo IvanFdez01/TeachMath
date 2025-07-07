@@ -1,7 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+    --color-mainneutral: #E9DFFB;
+    --color-secneutral: #e8f2ed;
+    
+    --color-maindark: #1a062d;
+    --color-mainmid: #59169C;
+    --color-mainlight: #905BEC;
+
+    --color-secdark: #0e4d2c;
+    --color-secmid: #379759;
+    --color-seclight: #74b392;
+  }
+
 body {
-    color: neutral;
     font-family: 'Host Grotesk', sans-serif;
 }
 
@@ -15,3 +27,5 @@ h2 {
     font-weight: 400;
 }
 
+  
+  

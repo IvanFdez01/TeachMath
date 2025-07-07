@@ -1,5 +1,7 @@
-com\ejemplo\repository\MessageRepository.class
-com\ejemplo\service\MessageService.class
+com\ejemplo\config\WebConfig.class
+com\ejemplo\config\SecurityConfig.class
+com\ejemplo\controller\UserController.class
+com\ejemplo\model\MyUser.class
+com\ejemplo\services\SAUser.class
 com\ejemplo\TeachMathApp.class
-com\ejemplo\controller\MessageController.class
-com\ejemplo\model\Message.class
+com\ejemplo\repository\UserRepository.class
