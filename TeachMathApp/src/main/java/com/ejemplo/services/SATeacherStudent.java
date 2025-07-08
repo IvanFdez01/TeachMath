@@ -25,7 +25,7 @@ public class SATeacherStudent {
     private UserRepository user_repo;
 
     // CREATE
-    public ResponseEntity<?> create(@RequestBody TeacherStudentTransfer Tts) {
+    public ResponseEntity<?> create(TeacherStudentTransfer Tts) {
         Optional<MyUser> teacherOpt = user_repo.findByUsername(Tts.getTeacher());
         Optional<MyUser> studentOpt = user_repo.findByUsername(Tts.getStudent());
         if(studentOpt.isEmpty()) {
@@ -34,22 +34,22 @@ public class SATeacherStudent {
         } else if (teacherOpt.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                             .body("Profesor no existente.");
-        }else {
+        } else {
             MyUser teacher = teacherOpt.get();
             MyUser student = studentOpt.get();
-            if (!teacherstudent_repo.existsByTeacherAndStudent(teacher, student)) {
-                TeacherStudent savedRelation = teacherstudent_repo.save(new TeacherStudent(teacher,student));
+            if (!teacherstudent_repo.existsByTeacherAndStudentAndCourse(teacher, student, Tts.getCourse())) {
+                TeacherStudent savedRelation = teacherstudent_repo.save(new TeacherStudent(teacher,student,Tts.getCourse()));
                 return ResponseEntity.status(HttpStatus.CREATED)
                             .body(savedRelation);
             } else 
                 return ResponseEntity.status(HttpStatus.CONFLICT)
-                            .body("Pareja estudiante-profesor ya existente");
+                            .body("El estudiante '" + student.getUsername() + "' ya es tu alumno del curso " + Tts.getCourse() + ".");
         } 
     }
 
     // READ
     /* 
-    public ResponseEntity<?> findStudentsByTeacher(@RequestBody String uname) {
+    public ResponseEntity<?> findStudentsByTeacher(String uname) {
         Optional<MyUser> cont = user_repo.findByUsername(u.getUsername()); // username pk
         if (cont.isPresent()) {
             MyUserTransfer Tuser = new MyUserTransfer();

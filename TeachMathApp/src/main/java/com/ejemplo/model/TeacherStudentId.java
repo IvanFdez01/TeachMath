@@ -4,14 +4,16 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class TeacherStudentId implements Serializable {
-    private MyUser teacher;
-    private MyUser student;
+    private String teacher;
+    private String student;
+    private COURSES course;
 
     public TeacherStudentId() {}
 
-    public TeacherStudentId(MyUser teacher, MyUser student) {
+    public TeacherStudentId(String teacher, String student, COURSES course) {
         this.teacher = teacher;
         this.student = student;
+        this.course = course;
     }
 
     // OBLIGATORIOS
@@ -22,12 +24,12 @@ public class TeacherStudentId implements Serializable {
         if (!(o instanceof TeacherStudentId)) 
             return false;
         TeacherStudentId that = (TeacherStudentId) o;
-        return teacher.equals(that.teacher) && student.equals(that.student);
+        return teacher.equals(that.teacher) && student.equals(that.student) && course == that.course;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(teacher, student);
+        return Objects.hash(teacher, student, course);
     }
 }
 

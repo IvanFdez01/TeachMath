@@ -17,7 +17,8 @@ public class MyUser {
     @Column(name = "HASH_PSWD")
     private String hash_pswd;
 
-     @JsonProperty("rol")
+    @Enumerated(EnumType.STRING)
+    @JsonProperty("rol")
     @Column(name = "ROL")
     private ROL rol;
 

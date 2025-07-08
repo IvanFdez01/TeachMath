@@ -52,7 +52,7 @@ const Login: React.FC = () => {
 
             </header>
             <section className = "bg-mainneutral p-8">
-                <form onSubmit={handleSubmit} method="post" className = "flex flex-col px-10 py-10 gap-6 bg-white rounded shadow">
+                <form onSubmit={handleSubmit} className = "flex flex-col px-10 py-10 gap-6 bg-white rounded shadow">
 {/* Invalid Cred error */}           
                     {status === 401 && // 401:UNAUTHORIZED
                         <p className = "p-2 rounded bg-red-200 border border-red-400 text-red-500">

@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import SideBar from "../components/SideBar";
 import { OPS } from "../context/types";
 import { useSession } from "../context/SessionContext";
-import Students from "../components/homepage/Students";
+import Students from "../components/sections/Students";
 
 const Home: React.FC = () => {
 

@@ -1,16 +1,20 @@
 package com.ejemplo.datatransfers;
 
+import com.ejemplo.model.COURSES;
+
 public class TeacherStudentTransfer {
     private String teacher;
     private String student;
+    private COURSES course;
 
     public TeacherStudentTransfer() {
         // Constructor vacío necesario para serialización
     }
 
-    public TeacherStudentTransfer(String teacher, String student) {
+    public TeacherStudentTransfer(String teacher, String student, COURSES course) {
         this.teacher = teacher;
         this.student = student;
+        this.course = course;
     }
 
     public String getTeacher() {
@@ -27,5 +31,13 @@ public class TeacherStudentTransfer {
 
     public void setStudent(String username) {
         this.student = username;
+    }
+
+    public COURSES getCourse() {
+        return course;
+    }
+
+    public void setCourse(COURSES c) {
+        this.course = c;
     }
 }

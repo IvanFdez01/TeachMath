@@ -1,0 +1,21 @@
+Por defecto, JPA/Hibernate 
+no realiza cambios DESTRUCTIVOS 
+(como modificar claves primarias o eliminar columnas) 
+en las tablas existentes, incluso si se usa 
+spring.jpa.hibernate.ddl-auto=update en el pom.xml
+
+Ese update cubre:
+
+-Crea tablas nuevas si no existen.
+-Agrega columnas nuevas.
+-NO borra NI modifica claves primarias existentes.
+
+(todo se hace al compilar)
+
+*******¿Por que?******
+Me dio un problema en el que modifiqué una entidad y pasó
+a tener de 2PKs a 3PKs, y las inserciones con iguales valores
+para las 2PKs pero distintas 3ªsPKs daban violacion unica 
+(es decir principio basico de PK ya existente)
+el problema estaba en que la BD seguia configurada con 2PKs
+y JPA no la actualizará

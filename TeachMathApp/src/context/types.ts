@@ -3,9 +3,14 @@ export enum OPS {
 }
 
 export enum ROL {
-  NONE = "NONE",
   TEACHER = "TEACHER",
   STUDENT = "STUDENT"
+}
+
+export enum COURSES {
+  MATH = "Mathematics",
+  PROG = "Programming",
+  PHY = "Physics"
 }
 
 export type MyUser = {
