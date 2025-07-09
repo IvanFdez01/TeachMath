@@ -1,6 +1,7 @@
 package com.ejemplo.services;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,21 +49,14 @@ public class SATeacherStudent {
     }
 
     // READ
-    /* 
     public ResponseEntity<?> findStudentsByTeacher(String uname) {
-        Optional<MyUser> cont = user_repo.findByUsername(u.getUsername()); // username pk
-        if (cont.isPresent()) {
-            MyUserTransfer Tuser = new MyUserTransfer();
-            Tuser.setUsername(cont.get().getUsername());
-            Tuser.setRol(cont.get().getRol());
-            if (_password_encoder.matches(u.getHashPswd(), cont.get().getHashPswd()))
-                return ResponseEntity.ok(Tuser); // status=ok, body=Tuser
-            else
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password"); 
-
-        }
-        else 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials"); 
+        // profe existe? de momento es garantizado 
+        List<TeacherStudent> list = teacherstudent_repo.findByTeacher_Username(uname);
+        if (list.isEmpty()) 
+            return ResponseEntity.noContent().build(); // 204 NO_CONTENT
+        List<TeacherStudentTransfer> Tlist = list.stream()
+            .map(tts -> new TeacherStudentTransfer(uname, tts.getStudent().getUsername(), tts.getCourse())).toList();
+        return ResponseEntity.ok(Tlist);
     }
-    */
+    
 }

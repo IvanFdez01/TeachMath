@@ -19,3 +19,13 @@ para las 2PKs pero distintas 3ªsPKs daban violacion unica
 (es decir principio basico de PK ya existente)
 el problema estaba en que la BD seguia configurada con 2PKs
 y JPA no la actualizará
+
+
+******************************
+
+Si el puerto del back se queda abierto por un crasheo de la app
+hay que cerrarlo manualmente.
+1.Abrir CMD
+2.$ netstat -a -n -o (ver todos los puertos abiertos, buscar PID del back)
+3.$ taskkill /PID <PID> /F
+

@@ -13,7 +13,19 @@ export enum COURSES {
   PHY = "Physics"
 }
 
+export const course_col = {
+    "MATH":"blue-500",
+    "PROG":"yellow-800",
+    "PHY":"orange-500"
+}
+
 export type MyUser = {
     username: string,
     rol: ROL
+}
+
+export type TeacherStudent = {
+    teacher: string,
+    student: string,
+    course: keyof typeof COURSES
 }

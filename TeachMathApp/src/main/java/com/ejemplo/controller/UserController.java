@@ -44,10 +44,10 @@ public class UserController {
         COURSES c = COURSES.valueOf(body.get("courseName")); // asumir que enums de front y back son iguales
         return sa_teacher_student.create(new TeacherStudentTransfer(teacher_uname, body.get("student_uname"), c));
     }
-    /* 
+     
     @GetMapping("/teachers/{teacher_uname}/students")
     public ResponseEntity<?> findStudentsByTeacher(@PathVariable String teacher_uname) {
         return sa_teacher_student.findStudentsByTeacher(teacher_uname);
     }
-    */
+    
 } 

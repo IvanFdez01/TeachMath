@@ -28,7 +28,6 @@ const Login: React.FC = () => {
                 body: JSON.stringify(newuser)
             });
             setStatus(response.status)
-            console.log(status)
             if (response.ok) {
                 // contexto session
                 const data = await response.json()
