@@ -1,5 +1,6 @@
 package com.ejemplo.datatransfers;
 
+import com.ejemplo.model.MyUser;
 import com.ejemplo.model.ROL;
 
 public class MyUserTransfer {
@@ -8,6 +9,11 @@ public class MyUserTransfer {
 
     public MyUserTransfer() {
         // Constructor vacío necesario para serialización
+    }
+
+    public MyUserTransfer(MyUser u) {
+        this.username = u.getUsername();
+        this.rol = u.getRol();
     }
 
     public MyUserTransfer(String username, ROL rol) {

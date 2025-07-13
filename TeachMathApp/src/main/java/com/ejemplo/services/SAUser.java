@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ejemplo.datatransfers.MyUserTransfer;
+import com.ejemplo.model.MyException;
 import com.ejemplo.model.MyUser;
 import com.ejemplo.repository.UserRepository;
 
@@ -25,34 +27,32 @@ public class SAUser {
     private final PasswordEncoder _password_encoder = new BCryptPasswordEncoder();
 
     // CREATE
-    public ResponseEntity<?> register(@RequestBody MyUser u) {
+    public MyUserTransfer register(MyUser u) {
         Optional<MyUser> cont = user_repo.findByUsername(u.getUsername());
         if (cont.isPresent()) {
             // PK ya existente (username)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                             .body(Collections.singletonMap("error", "Usuario ya existente."));
+            throw new MyException("Usuario ya existente", HttpStatus.BAD_REQUEST);
         } else {
             u.setHashPswd(_password_encoder.encode(u.getHashPswd())); // hashear contraseña
             MyUser savedUser = user_repo.save(u);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+            return new MyUserTransfer(savedUser);
         } 
     }
 
     // READ
-    public ResponseEntity<?> login(@RequestBody MyUser u) {
+    public MyUserTransfer login(@RequestBody MyUser u) {
         Optional<MyUser> cont = user_repo.findByUsername(u.getUsername()); // username pk
         if (cont.isPresent()) {
-            MyUserTransfer Tuser = new MyUserTransfer();
-            Tuser.setUsername(cont.get().getUsername());
-            Tuser.setRol(cont.get().getRol());
+            MyUserTransfer Tuser = new MyUserTransfer(cont.get());
             if (_password_encoder.matches(u.getHashPswd(), cont.get().getHashPswd()))
-                return ResponseEntity.ok(Tuser); // status=ok, body=Tuser
+                return Tuser; 
             else
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password"); 
-
+                throw new MyException("Incorrect Password", 
+                    HttpStatus.UNAUTHORIZED);
         }
         else 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials"); 
+            throw new MyException("Invalid Credentials", 
+                    HttpStatus.UNAUTHORIZED);    
     }
 
 }

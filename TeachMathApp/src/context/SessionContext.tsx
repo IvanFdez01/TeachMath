@@ -13,7 +13,7 @@ const SessionContext = createContext<SessionContextType|undefined>(undefined);
 export const SessionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     
     const [username,setUsername] = useState("")
-    const [userrol,setRol] = useState<ROL>(ROL.NONE)
+    const [userrol,setRol] = useState<ROL>(ROL.STUDENT)
     const user:MyUser = {username:username,rol:userrol}
 
     return (

@@ -62,13 +62,13 @@ const Login: React.FC = () => {
                     <div className = "flex flex-col gap-1">
                         <label htmlFor="inputname" className = "text-xl font-bold text-maindark">Username</label>
                         <input onChange={(e)=>setUname(e.target.value)} type="text" name="inputname" id="inputname" placeholder = "Type your username here"
-                            className = "text-maindark p-2 border-3 border-mainneutral rounded border-b-mainmid focus:border-none focus:outline-none focus:ring-4 focus: ring-mainlight focus:text-mainmid"/>
+                            className = "text-maindark p-2 border-3 rounded border-b-4 border-mainmid focus:border-none focus:outline-none focus:ring-4 focus: ring-mainlight focus:text-mainmid"/>
                     </div>
 {/* Password Field */}
                     <div className = "flex flex-col gap-1">
                         <label htmlFor="inputpswd" className = "text-xl font-bold text-maindark">Password</label>
                         <input onChange={(e)=>setPswd(e.target.value)} type="password" name="inputpswd" id="inputpswd" placeholder = "Type your password here"
-                            className = "text-maindark p-2 border-3 border-mainneutral rounded border-b-mainmid focus:border-none focus:outline-none focus:ring-4 focus: ring-mainlight focus:text-mainmid"/>
+                            className = "text-maindark p-2 border-3 rounded border-b-4 border-mainmid focus:border-none focus:outline-none focus:ring-4 focus: ring-mainlight focus:text-mainmid"/>
                     </div>
 {/* Submit Bttn */}
                     <button type="submit" className = "text-xl font-bold text-white bg-mainmid p-[5%] rounded hover:cursor-pointer">

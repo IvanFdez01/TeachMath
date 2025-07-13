@@ -1,9 +1,13 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
+/* tus variables y estilos después */
+@layer base {
+  :root {
     --color-mainneutral: #E9DFFB;
     --color-secneutral: #e8f2ed;
-    
+
     --color-maindark: #1a062d;
     --color-mainmid: #59169C;
     --color-mainlight: #905BEC;
@@ -13,19 +17,20 @@
     --color-seclight: #74b392;
   }
 
-body {
-    font-family: 'Host Grotesk', sans-serif;
+  body {
+  font-family: 'Host Grotesk', sans-serif;
 }
 
-h1 {
+    h1 {
     font-size: 2rem;
     font-weight: 600;
-}
+    }
 
-h2 {
+    h2 {
     font-size: 1.2rem;
     font-weight: 400;
+    }
+
 }
 
-  
-  
+

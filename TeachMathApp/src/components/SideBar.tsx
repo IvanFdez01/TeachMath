@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 import { OPS, ROL } from "../context/types";
 import { useSession } from '../context/SessionContext';
+import { Menu } from 'lucide-react';
 
 interface SideBarProps {
   setStatus: (value: OPS) => void;
@@ -24,16 +25,14 @@ const SideBar: React.FC<SideBarProps> = ({setStatus}) => {
         <div>
             {hidden ? (
                 // boton abrir side-bar
-                <div>
-                    <button onClick={() =>setHidden(false)} className = "fixed top-10 left-10 p-3 bg-mainmid text-white border-2 border-mainlight rounded hover:cursor-pointer">
-                        &lt;
-                    </button>
-                </div>
+                <button onClick={() =>setHidden(false)} className = "z-30 fixed top-10 left-10 p-3 bg-mainmid text-white border-4 border-mainmid rounded hover:cursor-pointer">
+                    <Menu/>
+                </button>
             ) : (
                 // side-bar
                 <>
-                <div className="p-10 fixed top-0 right-0 left-0 bottom-0 bg-gray-900 opacity-80 pointer-events-none"></div>
-                <div className = "text-2xl fixed top-0 bottom-0 left-0 right-1/4 bg-gray-900 shadow-xl shadow-mainlight p-10">
+                <div className="z-30 p-10 fixed top-0 right-0 left-0 bottom-0 bg-gray-900 opacity-80 pointer-events-none"></div>
+                <div className = "z-30 text-2xl fixed top-0 bottom-0 left-0 right-1/4 bg-gray-900 shadow-xl shadow-mainlight p-10">
                     <button onClick = {() => setHidden(true)} className = "underline text-mainlight hover:cursor-pointer">
                         &larr;Hide
                     </button>

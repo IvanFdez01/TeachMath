@@ -1,21 +1,23 @@
 
-import React from 'react';
+import ReactDOM from 'react-dom';
 import { useAlert } from '../context/AlertContext';
 
 const Alert: React.FC = () => {
     // captura los estados del contexto (useAlert implementa useContext(AlertContextProvider))
     const { showAlert, message, hideAlert } = useAlert(); 
 
-    return (
+    return ReactDOM.createPortal(
         showAlert && (
-        <>
-        <div className="p-10 fixed top-0 right-0 left-0 bottom-0 bg-black opacity-90"></div>
-        <div className = "bg-mainneutral rounded p-8 fixed top-1/6 left-10 right-10 flex flex-col items-center gap-3">
-            <p className = "text-2xl text-maindark flex text-center">{message}</p>
-            <button onClick = {hideAlert} className = "bg-secmid rounded py-3 px-6 text-xl text-mainneutral hover:cursor-pointer"><strong>OK</strong></button>
+        <div className="z-50 relative">
+            <div className="fixed top-0 right-0 left-0 bottom-0 bg-black opacity-80"></div>
+            <div className="z-60 flex flex-col items-center gap-4 fixed top-20 left-20 right-20 bg-white text-black p-6 rounded shadow-lg">
+                <h2 className = "text-2xl">{message}</h2>
+                <button className = "rounded bg-secmid text-white py-3 px-6" onClick={hideAlert}><strong>OK</strong></button>
+            </div>
         </div>
-        </> 
-        )
+
+        ),
+        document.getElementById('alert-root')!
     );
 };
 

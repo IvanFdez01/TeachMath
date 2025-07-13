@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.ejemplo.datatransfers.MyUserTransfer;
 import com.ejemplo.datatransfers.TeacherStudentTransfer;
 import com.ejemplo.model.MyUser;
 import com.ejemplo.model.TeacherStudent;
@@ -20,6 +19,7 @@ import com.ejemplo.repository.UserRepository;
 @Service
 public class SATeacherStudent {
 
+    //JPA
     @Autowired // gestiona la dependencia del repo con el SA automaticamente (no cuenta como attr)
     private TeacherStudentRepository teacherstudent_repo;
     @Autowired
