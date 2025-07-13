@@ -9,6 +9,7 @@ import com.ejemplo.services.SAFiles;
 import com.ejemplo.services.SATeacherStudent;
 import com.ejemplo.services.SAUser;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -50,13 +51,18 @@ public class UserController {
 
     @PostMapping("/teachers/{teacher_uname}/add-student")
     public ResponseEntity<?> createTeacherStudentRelation(@PathVariable String teacher_uname, @RequestBody Map<String, String> body) {
-        COURSES c = COURSES.valueOf(body.get("courseName")); // asumir que enums de front y back son iguales
-        return sa_teacher_student.create(new TeacherStudentTransfer(teacher_uname, body.get("student_uname"), c));
+        // asumir que en el mapa existen las claves courseName y student_uname
+        // asumir que enums de front y back son iguales y restrictivos
+        COURSES c = COURSES.valueOf(body.get("courseName")); 
+        TeacherStudentTransfer res = sa_teacher_student
+            .create(new TeacherStudentTransfer(teacher_uname, body.get("student_uname"), c));
+        return ResponseEntity.ok(res);
     }
      
     @GetMapping("/teachers/{teacher_uname}/students")
     public ResponseEntity<?> findStudentsByTeacher(@PathVariable String teacher_uname) {
-        return sa_teacher_student.findStudentsByTeacher(teacher_uname);
+        List<TeacherStudentTransfer> res = sa_teacher_student.findStudentsByTeacher(teacher_uname);
+        return ResponseEntity.ok(res);
     }
 
     @PostMapping("/uploads/{teacher_uname}")
@@ -71,7 +77,7 @@ public class UserController {
     }
 
     @GetMapping("/uploads/{teacher_uname}/{filename:.+}")
-    public ResponseEntity<?> downloadFile(@PathVariable String teacher_uname, @PathVariable String filename) {
+    public ResponseEntity<?> getFile(@PathVariable String teacher_uname, @PathVariable String filename) {
         return sa_files.getFile(teacher_uname, filename);
     }
     

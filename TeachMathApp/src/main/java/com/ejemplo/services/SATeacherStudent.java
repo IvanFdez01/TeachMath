@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ejemplo.datatransfers.TeacherStudentTransfer;
+import com.ejemplo.model.MyException;
 import com.ejemplo.model.MyUser;
 import com.ejemplo.model.TeacherStudent;
 import com.ejemplo.repository.TeacherStudentRepository;
@@ -26,37 +27,36 @@ public class SATeacherStudent {
     private UserRepository user_repo;
 
     // CREATE
-    public ResponseEntity<?> create(TeacherStudentTransfer Tts) {
+    public TeacherStudentTransfer create(TeacherStudentTransfer Tts) {
         Optional<MyUser> teacherOpt = user_repo.findByUsername(Tts.getTeacher());
         Optional<MyUser> studentOpt = user_repo.findByUsername(Tts.getStudent());
-        if(studentOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                            .body("Alumno no existente.");
-        } else if (teacherOpt.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                            .body("Profesor no existente.");
-        } else {
-            MyUser teacher = teacherOpt.get();
-            MyUser student = studentOpt.get();
-            if (!teacherstudent_repo.existsByTeacherAndStudentAndCourse(teacher, student, Tts.getCourse())) {
-                TeacherStudent savedRelation = teacherstudent_repo.save(new TeacherStudent(teacher,student,Tts.getCourse()));
-                return ResponseEntity.status(HttpStatus.CREATED)
-                            .body(savedRelation);
-            } else 
-                return ResponseEntity.status(HttpStatus.CONFLICT)
-                            .body("El estudiante '" + student.getUsername() + "' ya es tu alumno del curso " + Tts.getCourse() + ".");
-        } 
+        
+        if(studentOpt.isEmpty()) 
+            throw new MyException("Alumno no existente", HttpStatus.NOT_FOUND);
+        if (teacherOpt.isEmpty()) 
+            throw new MyException("Profesor no existente", HttpStatus.NOT_FOUND);
+        
+        MyUser teacher = teacherOpt.get();
+        MyUser student = studentOpt.get();
+        boolean relationExists = teacherstudent_repo.existsByTeacherAndStudentAndCourse(teacher, student, Tts.getCourse());
+        if (relationExists) {
+            throw new MyException("El estudiante '" + student.getUsername() + "' ya es tu alumno del curso " + Tts.getCourse() + ".",
+                HttpStatus.CONFLICT);
+        }  
+        TeacherStudent savedRelation = teacherstudent_repo.save(new TeacherStudent(teacher,student,Tts.getCourse()));
+        return new TeacherStudentTransfer(savedRelation); 
     }
 
     // READ
-    public ResponseEntity<?> findStudentsByTeacher(String uname) {
+    public List<TeacherStudentTransfer> findStudentsByTeacher(String uname) {
         // profe existe? de momento es garantizado 
         List<TeacherStudent> list = teacherstudent_repo.findByTeacher_Username(uname);
         if (list.isEmpty()) 
-            return ResponseEntity.noContent().build(); // 204 NO_CONTENT
-        List<TeacherStudentTransfer> Tlist = list.stream()
-            .map(tts -> new TeacherStudentTransfer(uname, tts.getStudent().getUsername(), tts.getCourse())).toList();
-        return ResponseEntity.ok(Tlist);
+            throw new MyException("Profesor no existente", HttpStatus.NO_CONTENT);
+
+        return list.stream()
+            .map(tts -> new TeacherStudentTransfer(uname, tts.getStudent().getUsername(), tts.getCourse()))
+            .toList();
     }
     
 }
