@@ -11,6 +11,7 @@ public class ExceptionsHandler {
 
     @ExceptionHandler(MyException.class)
     public ResponseEntity<String> handleApiException(MyException e) {
+        System.out.println(e.getMessage());
         return ResponseEntity
             .status(e.getStatus())
             .body(e.getMessage());

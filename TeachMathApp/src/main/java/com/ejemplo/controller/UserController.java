@@ -9,15 +9,19 @@ import com.ejemplo.services.SAFiles;
 import com.ejemplo.services.SATeacherStudent;
 import com.ejemplo.services.SAUser;
 
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.core.io.Resource;
 
 @CrossOrigin(origins = "http://localhost:5173") // puerto del front
 @RestController
@@ -67,18 +71,23 @@ public class UserController {
 
     @PostMapping("/uploads/{teacher_uname}")
     public ResponseEntity<?> upload(@PathVariable String teacher_uname, @RequestParam("file") MultipartFile file) {
-        System.out.println("Filename: " + file.getOriginalFilename() + ", Size: " + file.getSize());
-        return sa_files.upload(teacher_uname, file);
+        sa_files.upload(teacher_uname, file);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("uploads/{teacher_uname}/")
     public ResponseEntity<?> getUploads(@PathVariable String teacher_uname) {
-        return sa_files.getMyFiles(teacher_uname);
+        List<String> res = sa_files.getUploads(teacher_uname);
+        return ResponseEntity.ok(res);
     }
 
     @GetMapping("/uploads/{teacher_uname}/{filename:.+}")
     public ResponseEntity<?> getFile(@PathVariable String teacher_uname, @PathVariable String filename) {
-        return sa_files.getFile(teacher_uname, filename);
+        Resource res = sa_files.getFile(teacher_uname, filename);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
+                .body(res);
     }
     
 } 

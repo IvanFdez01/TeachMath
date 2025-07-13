@@ -16,13 +16,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ejemplo.model.MyException;
+
 
 @Service
 public class SAFiles {
 
     private final Path basePath = Paths.get("C:","Users","vanfl","uploads");
 
-    public ResponseEntity<?> upload(String teacher_uname, MultipartFile file) {
+    public void upload(String teacher_uname, MultipartFile file) {
         Path path = basePath.resolve(teacher_uname);
         try {
             // si no existe la carpeta, crearla
@@ -34,22 +36,19 @@ public class SAFiles {
             // guarda el contenido del file en dest (sobreescribe)
             Files.copy(file.getInputStream(), dest, StandardCopyOption.REPLACE_EXISTING);
 
-            return ResponseEntity.ok()
-                .body("Guardado en: " + dest.toString());
-
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Error: " + e.getMessage());
+            throw new MyException("Error: " + e.getMessage(), 
+                HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public ResponseEntity<?> getMyFiles(String teacher_uname) {
+    public List<String> getUploads(String teacher_uname) {
         try {
             Path path = basePath.resolve(teacher_uname).normalize();
             if (!Files.exists(path))
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Error obteniendo los archivos");
+                throw new MyException("No existe path: " + path.toString(),
+                    HttpStatus.NOT_FOUND);
 
             // directorio => lista de nombres de sus archivos
             List<String> fileNames = Files.list(path)
@@ -57,29 +56,27 @@ public class SAFiles {
                 .map(filepath -> filepath.getFileName().toString())
                 .collect(Collectors.toList());
 
-            return ResponseEntity.ok(fileNames);
+            return fileNames;
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Error obteniendo los archivos");
+            throw new MyException("Error obteniendo los archivos",
+                HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public ResponseEntity<?> getFile(String teacher_uname, String filename) {
+    public Resource getFile(String teacher_uname, String filename) {
         try {
             Path path = basePath.resolve(teacher_uname).resolve(filename).normalize();
             Resource res = new UrlResource(path.toUri());
 
             if (!res.exists() || !res.isReadable()) 
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                throw new MyException("No existe o no es legible: " + res.toString(), HttpStatus.NOT_FOUND);
 
-            return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_PDF)
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filename + "\"")
-                .body(res);
+            return res;
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            throw new MyException("Error obteniendo el archivo.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
 }
